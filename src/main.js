@@ -1,5 +1,9 @@
 import { createApp } from 'vue'
-import './style.css'
 import App from './App.vue'
-
-createApp(App).mount('#app')
+import router from './router/router';
+import './assets/styles.scss';
+import PrimeVue from 'primevue/config';
+createApp(App)
+.use(PrimeVue ,{ripple:true})
+.use(router)
+.mount('#app')
