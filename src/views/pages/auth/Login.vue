@@ -25,8 +25,8 @@ const logoUrl = computed(() => {
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
                         <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
-                        <div class="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
-                        <span class="text-600 font-medium">Sign in to continue</span>
+                        <div class="text-900 text-3xl font-medium mb-3">Bienvenido!</div>
+                        <span class="text-600 font-medium">Inicia sesion para continuar</span>
                     </div>
 
                     <div>
@@ -39,11 +39,11 @@ const logoUrl = computed(() => {
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
                                 <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label>
+                                <label for="rememberme1">Recuerdame</label>
                             </div>
-                            <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
+                            <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl"></Button>
+                        <Button label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
                         
                     </div>
                 </div>
