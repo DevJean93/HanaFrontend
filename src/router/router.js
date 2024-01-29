@@ -1,37 +1,39 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import AppLayout from "../layout/AppLayout.vue";
-import HelloWorld from "../components/HelloWorld.vue";
-import LoginView from '../views/pages/auth/Login.vue'
-import Access from '../views/pages/auth/Access.vue'
-import ErrorView from '../views/pages/auth/Error.vue'
-import App from '@/App.vue'
+
+
 const routes = [
   {
     path: "/",
-    component:LoginView ,
+    name:'main',
+    component:()=> import ('../views/pages/auth/Login.vue') ,
     
   },
   {
     path: "/Acceso",
-    component:Access ,
+    name:'main-acceso',
+    component:()=> import ('../views/pages/auth/Access.vue') ,
     
   },
   {
     path: "/Error",
-    component:ErrorView ,
+    name:'main-error',
+    component:()=> import('../views/pages/auth/Error.vue') ,
     
   },
   {
     path: "/Home",
-    component: AppLayout,
+    name:'main-layout',
+    component: () => import('../layout/AppLayout.vue'),
     children: [
       {
         path: "/Home",
-        component: App,
+        name:'main-home',
+        component: ()=> import('../App.vue'),
       },
       {
         path: "/HelloWorld",
-        component: HelloWorld,
+        name:'main-hello',
+        component: ()=> import('../components/HelloWorld.vue'),
       },
     ],
   },
