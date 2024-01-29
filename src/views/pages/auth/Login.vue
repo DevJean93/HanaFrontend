@@ -6,11 +6,21 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
+import { reactive } from 'vue';
 
 const { layoutConfig } = useLayout();
-const email = ref('');
-const password = ref('');
-const checked = ref(false);
+
+
+const FormLogin = reactive({
+    email: '',
+    password: '',
+    checked:false
+});
+
+const handleSubmit = ()=>{
+  console.log('desde el boton', FormLogin)
+}
+
 
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
@@ -29,23 +39,25 @@ const logoUrl = computed(() => {
                         <span class="text-600 font-medium">Inicia sesion para continuar</span>
                     </div>
 
-                    <div>
+                    <form @submit.prevent="handleSubmit">
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="email" />
+                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="FormLogin.email" required/>
 
                         <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
+                        <Password id="password1" v-model="FormLogin.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" 
+                        inputClass="w-full" :inputStyle="{ padding: '1rem' }" required></Password>
 
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
+                                <Checkbox v-model="FormLogin.checked" id="rememberme1" binary class="mr-2"></Checkbox >
                                 <label for="rememberme1">Recuerdame</label>
                             </div>
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
-                        <Button label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
+                        <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
                         
-                    </div>
+                    </form>
+                    {{ FormLogin }}
                 </div>
             </div>
         </div>

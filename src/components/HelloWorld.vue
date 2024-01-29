@@ -1,52 +1,41 @@
 
 
 
-<script>
+<script setup>
 import { ref } from 'vue'
+import Textarea from 'primevue/textarea';
+import HanaAPI from '../api/HanaAPI'
 
-import axios from 'axios'
 
-export default {
-  name: 'Login',
-  setup() {
-    const data = ref(null);
-    const error = ref(null);
+const data = ref(null);
+const error = ref(null);
 
-    const login = async () => {
-      try {
-        const response = await axios.post('http://94.74.66.85:8094/api/Auth/Login', {
-          email: 'jruano@gala.com.gt',
-          password: 'Jruano@23',
-        });
+const login = async () => {
 
-        data.value = response
-        error.value = null;
-        console.log(data.value.data)
-      } catch (err) {
-        error.value = 'Error al iniciar sesión: ' + err.message;
-        data.value = null;
-      }
-    };
+  const reponse = await HanaAPI.post('/Auth/login', {
+    email: 'jruano@gala.com.gt',
+    password: 'Jruano@23',
+  }).then(resp =>  data.value = resp.data)
 
-    return {
-      data,
-      error,
-      login,
-    };
-  },
+  console.log(reponse)
+
 };
+
 
 </script>
 
 <template>
-
-
   <div class="card">
     <button @click="login">Iniciar Sesión</button>
     <p>
-      Edit
+    
       <code>components/HelloWorld.vue</code> to test HMR
     </p>
+    <span class="p-float-label">
+      <Textarea v-model="data" rows="5" cols="30" />
+      <label>JWT</label>
+  </span>
+
   </div>
 
   <p>
@@ -67,3 +56,4 @@ export default {
   color: #888;
 }
 </style>
+../api/HanaAPI
