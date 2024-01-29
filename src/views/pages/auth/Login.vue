@@ -6,19 +6,45 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
-import { reactive } from 'vue';
-
+import { useRouter } from 'vue-router'
+import HanaAPI from '../../../api/HanaAPI';
+import { useJwt } from '@vueuse/integrations/useJwt'
 const { layoutConfig } = useLayout();
 
-
-const FormLogin = reactive({
+const FormData = ref({
     email: '',
     password: '',
-    checked:false
-});
+    checked: false
+})
+ 
 
-const handleSubmit = ()=>{
-  console.log('desde el boton', FormLogin)
+const msgError = ref('')
+const router = useRouter()
+
+const Login = async () => {
+    const { email, password } = FormData.value
+     await HanaAPI.post('/Auth/login', {
+        email,
+        password
+    }).then((resp) => {
+        const { status, data } = resp
+        if(status === 200){
+            console.log(data)
+             const encodedJwt = ref(data)
+             const { payload } = useJwt(encodedJwt)
+             const {value} = payload
+             console.log(value)
+            router.push({ name: 'main-home' })
+        }
+      
+    }).catch((error) => {
+        const { status, data } =  error.response
+        if(status === 400){
+           msgError.value = data
+        }
+    })
+
+
 }
 
 
@@ -31,7 +57,9 @@ const logoUrl = computed(() => {
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
-            <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
+
+            <div
+                style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
                         <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
@@ -39,25 +67,28 @@ const logoUrl = computed(() => {
                         <span class="text-600 font-medium">Inicia sesion para continuar</span>
                     </div>
 
-                    <form @submit.prevent="handleSubmit">
+                    <form @submit.prevent="Login">
+                
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5" style="padding: 1rem" v-model="FormLogin.email" required/>
+                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5"
+                            style="padding: 1rem" v-model="FormData.email" required />
 
                         <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="FormLogin.password" placeholder="Password" :toggleMask="true" class="w-full mb-3" 
-                        inputClass="w-full" :inputStyle="{ padding: '1rem' }" required></Password>
+                        <Password id="password1" v-model="FormData.password" placeholder="Password" :toggleMask="true"
+                            class="w-full md:w-30rem mb-5" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required>
+                        </Password>
 
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
-                                <Checkbox v-model="FormLogin.checked" id="rememberme1" binary class="mr-2"></Checkbox >
+                                <Checkbox v-model="FormData.checked" id="rememberme1" binary class="mr-2"></Checkbox>
                                 <label for="rememberme1">Recuerdame</label>
                             </div>
-                            <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Olvidaste tu password?</a>
+                            <a class="font-medium no-underline ml-2 text-right cursor-pointer"
+                                style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
                         <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
-                        
+
                     </form>
-                    {{ FormLogin }}
                 </div>
             </div>
         </div>
@@ -74,5 +105,4 @@ const logoUrl = computed(() => {
 .pi-eye-slash {
     transform: scale(1.6);
     margin-right: 1rem;
-}
-</style>
+}</style>
