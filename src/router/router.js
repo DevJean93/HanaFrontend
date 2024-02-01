@@ -29,6 +29,7 @@ const routes = [
         path: "/Home",
         name:'main-home',
         component: ()=> import('../App.vue'),
+        
       },
       {
         path: "/HelloWorld",

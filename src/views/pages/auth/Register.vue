@@ -8,8 +8,8 @@ import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router'
 import HanaAPI from '../../../api/HanaAPI';
-import { MensajeAlerta} from '../../../composables/MensajeAlerta';
-import { useAuthStore } from '@/stores/AuthStore'
+import { useJwt } from '@vueuse/integrations/useJwt'
+import {ToastAlert} from '../../../composables/MensajeAlerta';
 const { layoutConfig } = useLayout();
 
 const FormData = ref({
@@ -17,28 +17,31 @@ const FormData = ref({
     password: '',
     checked: false
 })
-
+ 
 const msgError = ref('')
 const router = useRouter()
-const AuthStore = useAuthStore()
 
 const Login = async () => {
     const { email, password } = FormData.value
-    await HanaAPI.post('/Auth/login', {
+     await HanaAPI.post('/Auth/login', {
         email,
         password
     }).then((resp) => {
         const { status, data } = resp
-        if (status === 200) {      
-            AuthStore.loginUser(data)        
+        if(status === 200){
+             const encodedJwt = data
+             const { payload } = useJwt(encodedJwt)
+             const {value} = payload
+             console.log(data)
+             console.log(value)
             router.push({ name: 'main-home' })
         }
-
+      
     }).catch((error) => {
-        const { status, data } = error.response
-        if (status === 400) {
-            msgError.value = data
-            MensajeAlerta('warning',msgError.value,'Error')
+        const { status, data } =  error.response
+        if(status === 400){
+           msgError.value = data
+          ToastAlert('error',msgError.value)
 
         }
     })
@@ -67,7 +70,7 @@ const logoUrl = computed(() => {
                     </div>
 
                     <form @submit.prevent="Login">
-
+                
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5"
                             style="padding: 1rem" v-model="FormData.email" required />
@@ -104,5 +107,4 @@ const logoUrl = computed(() => {
 .pi-eye-slash {
     transform: scale(1.6);
     margin-right: 1rem;
-}
-</style>
+}</style>

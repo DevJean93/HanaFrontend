@@ -1,32 +1,26 @@
 
 
-
 <script setup>
 import { ref } from 'vue'
 import Textarea from 'primevue/textarea';
 import HanaAPI from '../api/HanaAPI'
-
+import { useAuthStore } from '@/stores/AuthStore'
+import { useRouter } from "vue-router";
 
 const data = ref(null);
 const error = ref(null);
-
-const login = async () => {
-
-  const reponse = await HanaAPI.post('/Auth/login', {
-    email: 'jruano@gala.com.gt',
-    password: 'Jruano@23',
-  }).then(resp =>  data.value = resp.data)
-
-  console.log(reponse)
-
-};
-
+const AuthStore = useAuthStore()
+const router = useRouter();
+const LogOut = ()=>{
+  AuthStore.logout()
+  router.push({ name: 'main' })
+}
 
 </script>
 
 <template>
   <div class="card">
-    <button @click="login">Iniciar Sesión</button>
+    <button @click=" LogOut">Logout </button>
     <p>
     
       <code>components/HelloWorld.vue</code> to test HMR
