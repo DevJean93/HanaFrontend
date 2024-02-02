@@ -1,45 +1,76 @@
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { useJwt } from "@vueuse/integrations/useJwt";
-import { ref, computed } from "vue";
+import HanaAPI from "../api/HanaAPI";
+import router from '../router/router'
 
-export const useAuthStore = defineStore("authStore", () => {
+export const useAuth = defineStore("auth", () => {
+  const token = ref(localStorage.getItem("token"));
+  const user = ref(JSON.parse(localStorage.getItem("user")));
+  const isAuth = ref(false);
 
-    // referencias
-    const user = JSON.parse(localStorage.getItem("user"))
-    const LocalUser = ref(user);
-
-  // metodos de accion
-  const loginUser = (User) => {
-    const encodedJwt = User;
-    const { payload } = useJwt(encodedJwt);
-    const { value } = payload;
-    const { Email, Role, UserName } = value;
-    const UserActive = {
-      Email,
-      Role,
-      UserName, 
-      Token: User,
-    };
-    
-    localStorage.setItem("user", JSON.stringify(UserActive));
-    LocalUser.value = JSON.parse(localStorage.getItem("user"));
-  };
-  const logout = () => {
-  
-    localStorage.removeItem("user");
-    LocalUser.value = null
-
+  function setToken(tokenValue) {
+    localStorage.setItem("token", tokenValue);
+    token.value = tokenValue;
   }
 
-  
-  // retorno de objetos
+  function setUser(userValue) {
+    localStorage.setItem("user", JSON.stringify(userValue));
+    user.value = userValue;
+  }
+
+  function setIsAuth(auth) {
+    isAuth.value = auth;
+  }
+
+  const isAuthenticated = computed(() => {
+    return token.value && user.value;
+  });
+
+  const userEmail = computed(() => {
+    if (user.value) {
+      return user.value.Email ;
+    }
+    return "";
+  });
+
+  async function checkToken() {
+    try {
+      const tokenAuth = `Bearer ${token.value}`
+   
+      const response = await HanaAPI.get("/Auth/ValidarToken", {
+        params:{
+          Token:token.value
+        },
+        headers: {
+          Authorization: tokenAuth,
+        },
+      });
+      return response;
+    } catch (error) {
+      clear();
+      router.push({ name: "main"});
+
+    }
+  }
+
+  function clear() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    isAuth.value = false;
+    token.value = "";
+    user.value = "";
+  }
+
   return {
-    // state
-    LocalUser,
-    //getters
-    GetActualUser: computed(()=>{LocalUser.Email}),
-    // actions
-    loginUser,
-    logout,
+    token,
+    user,
+    setToken,
+    setUser,
+    checkToken,
+    isAuthenticated,
+    userEmail,
+    clear,
+    setIsAuth,
+    isAuth,
   };
 });

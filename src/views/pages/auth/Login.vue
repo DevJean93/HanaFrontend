@@ -8,8 +8,9 @@ import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router'
 import HanaAPI from '../../../api/HanaAPI';
+import { useJwt } from "@vueuse/integrations/useJwt";
 import { MensajeAlerta} from '../../../composables/MensajeAlerta';
-import { useAuthStore } from '@/stores/AuthStore'
+import { useAuth } from '@/stores/AuthStore'
 const { layoutConfig } = useLayout();
 
 const FormData = ref({
@@ -20,7 +21,7 @@ const FormData = ref({
 
 const msgError = ref('')
 const router = useRouter()
-const AuthStore = useAuthStore()
+const auth = useAuth()
 
 const Login = async () => {
     const { email, password } = FormData.value
@@ -29,8 +30,15 @@ const Login = async () => {
         password
     }).then((resp) => {
         const { status, data } = resp
+        console.log(data)
+        const encodedJwt = data;
+        const { payload } = useJwt(encodedJwt);
+        const { value } = payload;
+        const { Email, Role, UserName } = value;
         if (status === 200) {      
-            AuthStore.loginUser(data)        
+            auth.setToken(encodedJwt);
+            auth.setUser(value);
+            auth.setIsAuth(true);    
             router.push({ name: 'main-home' })
         }
 

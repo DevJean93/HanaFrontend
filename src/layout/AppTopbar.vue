@@ -2,19 +2,18 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '../layout/composables/layout';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/AuthStore'
+import { useAuth } from '@/stores/AuthStore'
 import { storeToRefs } from 'pinia'
 
 const { layoutConfig, onMenuToggle } = useLayout();
-const AuthStore = useAuthStore()
+ const AuthStore = useAuth()
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
 
-const { LocalUser } = storeToRefs(AuthStore)
-const currentUser = ref(LocalUser.value)
-
-
+const { isAuthenticated } = storeToRefs(AuthStore)
+console.log(isAuthenticated)
+//const currentUser = ref(LocalUser.value)
 
 onMounted(() => {
     bindOutsideClickListener();
@@ -73,7 +72,7 @@ const isOutsideClicked = (event) => {
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
             <img :src="logoUrl" alt="logo" />
-            <span>Bienvenido {{ currentUser ? currentUser.UserName: 'Default' }}</span>
+            <span>Bienvenido {{ isAuthenticated? isAuthenticated.UserName :'Default'}}</span>
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
