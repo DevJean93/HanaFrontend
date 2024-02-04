@@ -1,27 +1,22 @@
 <script setup>
-import { ref } from 'vue';
-
+import { ref ,computed} from 'vue';
+import { useAuth } from "../stores/AuthStore";
 import AppMenuItem from './AppMenuItem.vue';
+import MenuRole  from '../composables/menuModel';
+//const model = ref(Model);
 
-const model = ref([
-    {
-        label: 'Home',
-        items: [{ label: 'Home', icon: 'pi pi-fw pi-home', to: '/Home' }]
-    },
-    {
-        label: 'UI Components',
-        items: [
-            { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/HelloWorld' },
-          
-        ]
-    }
+const auth = useAuth();
+const userRole = ref(auth.user.Role); 
+const Menu = MenuRole(userRole.value)
+// Rol de usuario autenticado+
+const filteredMenu = computed(() =>  Menu );
+console.log(filteredMenu)
 
-]);
 </script>
 
 <template>
     <ul class="layout-menu">
-        <template v-for="(item, i) in model" :key="item">
+        <template v-for="(item, i) in filteredMenu" :key="item">
             <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
             <li v-if="item.separator" class="menu-separator"></li>
         </template>

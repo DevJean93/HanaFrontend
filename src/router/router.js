@@ -10,7 +10,12 @@ const routes = [
   {
     path: "/Acceso",
     name: "main-acceso",
-    component: () => import("../views/pages/auth/Access.vue"),
+    component: () => import("../views/pages/auth/AccessLogout.vue"),
+  },
+  {
+    path: "/Permisos",
+    name: "main-permisos",
+    component: () => import("../views/pages/auth/AccessPermisos.vue"),
   },
   {
     path: "/Error",
@@ -29,11 +34,17 @@ const routes = [
         path: "/Home",
         name: "main-home",
         component: () => import("../App.vue"),
+        meta: {
+          roles: ['Admin', 'User'],
+        },
       },
       {
         path: "/HelloWorld",
         name: "main-hello",
         component: () => import("../components/HelloWorld.vue"),
+        meta: {
+          roles: ['User'],
+        },
       },
     ],
   },
