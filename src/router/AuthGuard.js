@@ -8,14 +8,13 @@ export default async function routes(to, from, next) {
       const RouteRoles = to.meta.roles;
       //Roles de usuario
       const userRoles = auth.user.Role;
-     const Permisos = RouteRoles.includes(userRoles);
+      const Permisos = RouteRoles.includes(userRoles);
 
-     if(Permisos === true){
-         next();
-     }else{
-      next({ name: "main-permisos" });
-     }
-     
+  if (Permisos === true) {
+        next();
+      } else {
+        next({ name: "main-permisos" });
+      }
     } else {
       next({ name: "main-acceso" });
     }

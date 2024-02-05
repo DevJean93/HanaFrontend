@@ -35,7 +35,7 @@ const routes = [
         name: "main-home",
         component: () => import("../App.vue"),
         meta: {
-          roles: ['Admin', 'User'],
+          roles: ["Admin", "User", "Gerencia"],
         },
       },
       {
@@ -43,7 +43,7 @@ const routes = [
         name: "main-hello",
         component: () => import("../components/HelloWorld.vue"),
         meta: {
-          roles: ['User'],
+          roles: ["User"],
         },
       },
     ],

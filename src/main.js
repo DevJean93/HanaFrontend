@@ -26,7 +26,6 @@ pinia.use(({ store }) => {
       try {
         auth.setIsAuth(true);
       const aut = await auth.checkToken();
-      console.log(aut)
       } catch (error) {
         auth.clear();
       }

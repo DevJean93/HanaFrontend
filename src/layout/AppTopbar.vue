@@ -6,19 +6,23 @@ import { useAuth } from '@/stores/AuthStore'
 import { storeToRefs } from 'pinia'
 
 const { layoutConfig, onMenuToggle } = useLayout();
- const AuthStore = useAuth()
+const AuthStore = useAuth()
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
 
 const { isAuthenticated } = storeToRefs(AuthStore)
-console.log(isAuthenticated)
+
+const logout = () => {
+    AuthStore.clear()
+    router.push({ name: 'main' })
+}
 //const currentUser = ref(LocalUser.value)
 
 onMounted(() => {
     bindOutsideClickListener();
-   
- // console.log(UserActivo.value = LocalUserRef.user)
+
+    // console.log(UserActivo.value = LocalUserRef.user)
 });
 
 onBeforeUnmount(() => {
@@ -70,9 +74,9 @@ const isOutsideClicked = (event) => {
 
 <template>
     <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
+        <router-link to="/Home" class="layout-topbar-logo">
             <img :src="logoUrl" alt="logo" />
-            <span>Bienvenido {{ isAuthenticated? isAuthenticated.UserName :'Default'}}</span>
+            <span>Bienvenido {{ isAuthenticated ? isAuthenticated.UserName : 'Default' }}</span>
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -84,17 +88,9 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
+            <button @click="logout" class="p-link layout-topbar-button">
+                <i class="pi pi-sign-out"></i>
+                <span>Cerrar la sesión</span>
             </button>
         </div>
     </div>

@@ -10,7 +10,7 @@ const userRole = ref(auth.user.Role);
 const Menu = MenuRole(userRole.value)
 // Rol de usuario autenticado+
 const filteredMenu = computed(() =>  Menu );
-console.log(filteredMenu)
+
 
 </script>
 
