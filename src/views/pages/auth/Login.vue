@@ -9,7 +9,7 @@ import Button from 'primevue/button';
 import { useRouter } from 'vue-router'
 import HanaAPI from '../../../api/HanaAPI';
 import { useJwt } from "@vueuse/integrations/useJwt";
-import { MensajeAlerta} from '../../../composables/MensajeAlerta';
+import { MensajeAlerta } from '../../../composables/MensajeAlerta';
 import { useAuth } from '@/stores/AuthStore'
 const { layoutConfig } = useLayout();
 
@@ -22,32 +22,38 @@ const FormData = ref({
 const msgError = ref('')
 const router = useRouter()
 const auth = useAuth()
+const isLoading = ref(false)
+
+
+const ClicRegister = ()=>{
+      router.push({ name: 'main-register' })
+}
 
 const Login = async () => {
     const { email, password } = FormData.value
+    isLoading.value = true
     await HanaAPI.post('/Auth/login', {
         email,
         password
     }).then((resp) => {
         const { status, data } = resp
-        console.log(data)
         const encodedJwt = data;
         const { payload } = useJwt(encodedJwt);
         const { value } = payload;
-        const { Email, Role, UserName } = value;
-        if (status === 200) {      
+        if (status === 200) {
             auth.setToken(encodedJwt);
             auth.setUser(value);
-            auth.setIsAuth(true);    
+            auth.setIsAuth(true);
             router.push({ name: 'main-home' })
+            isLoading.value = false
         }
-
+        isLoading = false
     }).catch((error) => {
         const { status, data } = error.response
         if (status === 400) {
             msgError.value = data
-            MensajeAlerta('warning',msgError.value,'Error')
-
+            MensajeAlerta('warning', msgError.value, 'Error')
+            isLoading.value = false
         }
     })
 
@@ -69,7 +75,7 @@ const logoUrl = computed(() => {
                 style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
                     <div class="text-center mb-5">
-                        <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
+                        <img src="/demo/images/login/avatar2.png" alt="Image" height="50" class="mb-3" />
                         <div class="text-900 text-3xl font-medium mb-3">Bienvenido!</div>
                         <span class="text-600 font-medium">Inicia sesion para continuar</span>
                     </div>
@@ -93,8 +99,13 @@ const logoUrl = computed(() => {
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer"
                                 style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
-                        <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
-
+                        <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"
+                            :disabled="isLoading"></Button>
+                            <br>
+                            <br>
+                            <br>
+                        <a :onClick="ClicRegister" class="font-medium no-underline ml-2 text-right cursor-pointer" 
+                            style="color: var(--primary-color)">No tienes cuenta ? Registrarse</a>
                     </form>
                 </div>
             </div>

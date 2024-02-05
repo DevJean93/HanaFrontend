@@ -2,23 +2,23 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import HanaAPI from "../api/HanaAPI";
 import router from '../router/router'
-
+import { useJwt } from "@vueuse/integrations/useJwt";
 export const useAuth = defineStore("auth", () => {
   const token = ref(localStorage.getItem("token"));
   const user = ref(JSON.parse(localStorage.getItem("user")));
   const isAuth = ref(false);
 
-  function setToken(tokenValue) {
+  const setToken =(tokenValue)=> {
     localStorage.setItem("token", tokenValue);
     token.value = tokenValue;
   }
 
-  function setUser(userValue) {
+  const setUser =(userValue)=> {
     localStorage.setItem("user", JSON.stringify(userValue));
     user.value = userValue;
   }
 
-  function setIsAuth(auth) {
+  const setIsAuth=(auth)=> {
     isAuth.value = auth;
   }
 
@@ -32,6 +32,17 @@ export const useAuth = defineStore("auth", () => {
     }
     return "";
   });
+
+  const userRole = computed(()=>{
+    if(token.value){
+      const encodedJwt = token.value;
+      const { payload } = useJwt(encodedJwt);
+      const { value } = payload;
+      const { Role} = value;
+      return Role
+    }
+    return"";
+  })
 
   async function checkToken() {
     try {
@@ -72,5 +83,6 @@ export const useAuth = defineStore("auth", () => {
     clear,
     setIsAuth,
     isAuth,
+    userRole,
   };
 });

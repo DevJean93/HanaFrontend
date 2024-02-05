@@ -9,7 +9,7 @@ import Button from 'primevue/button';
 import { useRouter } from 'vue-router'
 import HanaAPI from '../../../api/HanaAPI';
 import { useJwt } from '@vueuse/integrations/useJwt'
-import {ToastAlert} from '../../../composables/MensajeAlerta';
+import { ToastAlert } from '../../../composables/MensajeAlerta';
 const { layoutConfig } = useLayout();
 
 const FormData = ref({
@@ -17,31 +17,35 @@ const FormData = ref({
     password: '',
     checked: false
 })
- 
+
 const msgError = ref('')
 const router = useRouter()
 
+const ClicLogin = ()=>{
+    router.push({name:"main"})
+}
+
 const Login = async () => {
     const { email, password } = FormData.value
-     await HanaAPI.post('/Auth/login', {
+    await HanaAPI.post('/Auth/login', {
         email,
         password
     }).then((resp) => {
         const { status, data } = resp
-        if(status === 200){
-             const encodedJwt = data
-             const { payload } = useJwt(encodedJwt)
-             const {value} = payload
-             console.log(data)
-             console.log(value)
+        if (status === 200) {
+            const encodedJwt = data
+            const { payload } = useJwt(encodedJwt)
+            const { value } = payload
+            console.log(data)
+            console.log(value)
             router.push({ name: 'main-home' })
         }
-      
+
     }).catch((error) => {
-        const { status, data } =  error.response
-        if(status === 400){
-           msgError.value = data
-          ToastAlert('error',msgError.value)
+        const { status, data } = error.response
+        if (status === 400) {
+            msgError.value = data
+            ToastAlert('error', msgError.value)
 
         }
     })
@@ -66,11 +70,11 @@ const logoUrl = computed(() => {
                     <div class="text-center mb-5">
                         <img src="/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3" />
                         <div class="text-900 text-3xl font-medium mb-3">Bienvenido!</div>
-                        <span class="text-600 font-medium">Inicia sesion para continuar</span>
+                        <span class="text-600 font-medium">Ingresa tus datos para el registro</span>
                     </div>
 
                     <form @submit.prevent="Login">
-                
+
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-30rem mb-5"
                             style="padding: 1rem" v-model="FormData.email" required />
@@ -89,6 +93,11 @@ const logoUrl = computed(() => {
                                 style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
                         <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"></Button>
+                        <br>
+                        <br>
+                        <br>
+                        <a :onClick="ClicLogin" class="font-medium no-underline ml-2 text-right cursor-pointer"
+                            style="color: var(--primary-color)">Regresar al login</a>
 
                     </form>
                 </div>
@@ -107,4 +116,5 @@ const logoUrl = computed(() => {
 .pi-eye-slash {
     transform: scale(1.6);
     margin-right: 1rem;
-}</style>
+}
+</style>

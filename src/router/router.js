@@ -23,6 +23,11 @@ const routes = [
     component: () => import("../views/pages/auth/Error.vue"),
   },
   {
+    path: "/Register",
+    name: "main-register",
+    component: () => import("../views/pages/auth/Register.vue"),
+  },
+  {
     path: "/Home",
     name: "main-layout",
     component: () => import("../layout/AppLayout.vue"),

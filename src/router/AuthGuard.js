@@ -7,7 +7,8 @@ export default async function routes(to, from, next) {
       // Roles de rutas
       const RouteRoles = to.meta.roles;
       //Roles de usuario
-      const userRoles = auth.user.Role;
+      const userRoles = auth.userRole;
+
       const Permisos = RouteRoles.includes(userRoles);
 
   if (Permisos === true) {

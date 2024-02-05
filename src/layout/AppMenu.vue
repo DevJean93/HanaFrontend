@@ -6,7 +6,8 @@ import MenuRole  from '../composables/menuModel';
 //const model = ref(Model);
 
 const auth = useAuth();
-const userRole = ref(auth.user.Role); 
+
+const userRole = ref(auth.userRole); 
 const Menu = MenuRole(userRole.value)
 // Rol de usuario autenticado+
 const filteredMenu = computed(() =>  Menu );
