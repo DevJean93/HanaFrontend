@@ -7,7 +7,6 @@ import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import { createPinia } from 'pinia'
 import { useAuth } from "./stores/AuthStore";
-import { fas } from "@fortawesome/free-solid-svg-icons";
 
 const app = createApp(App);
 const pinia = createPinia();
