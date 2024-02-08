@@ -8,8 +8,6 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 
 
-
-
 const cuent = useCuenta();
 const isLoading = ref(false)
 const DtoCuentas = [{
@@ -41,11 +39,17 @@ const getCuentas = async () => {
    <Card>
       <template #title>MAESTRO CUENTAS SAP</template>
       <template #content>
-         <div class="flex flex-row flex-wrap">
-            <Button type="button" label="Buscar" icon="pi pi-search" :loading="isLoading" @click="getCuentas" />
 
-            <InputText id="username" v-model="value" />
-            <label for="username">Username</label>
+         <div class="menu">
+            <Button type="button" label="Buscar" icon="pi pi-search" :loading="isLoading" @click="getCuentas"  rounded />
+
+           <div class="field col-12 md:col-4">
+                   <span class="p-float-label">
+                       <InputText type="text" id="Empresa" v-model="value1" />
+                       <label for="Empresa">Empresa</label>
+                   </span>
+               </div>
+
 
          </div>
 
@@ -54,3 +58,7 @@ const getCuentas = async () => {
 
    </Card>
 </template>
+
+<style scoped>
+
+</style>
