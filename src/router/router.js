@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-
-import AuthGuard  from '@/router/AuthGuard'
+import AuthGuard from "@/router/AuthGuard";
+import rutasSuchef from '@/modules/SuchefVentas/router/rutasSuchef'
 const routes = [
   {
     path: "/",
@@ -43,22 +43,16 @@ const routes = [
           roles: ["Admin", "User", "Gerencia"],
         },
       },
-      {
-        path: "/HelloWorld",
-        name: "main-hello",
-        component: () => import("../components/HelloWorld.vue"),
-        meta: {
-          roles: ["User"],
-        },
-      },
+      ...rutasSuchef,
     ],
   },
 ];
 
+console.log(routes)
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
 });
 
-router.beforeEach(AuthGuard)
+router.beforeEach(AuthGuard);
 export default router;

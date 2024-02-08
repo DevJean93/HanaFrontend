@@ -11,6 +11,7 @@ import HanaAPI from '../../../api/HanaAPI';
 import { useJwt } from "@vueuse/integrations/useJwt";
 import { MensajeAlerta } from '../../../composables/MensajeAlerta';
 import { useAuth } from '@/stores/AuthStore'
+
 const { layoutConfig } = useLayout();
 
 const FormData = ref({
@@ -24,10 +25,6 @@ const router = useRouter()
 const auth = useAuth()
 const isLoading = ref(false)
 
-
-const ClicRegister = ()=>{
-      router.push({ name: 'main-register' })
-}
 
 const Login = async () => {
     const { email, password } = FormData.value
@@ -47,14 +44,23 @@ const Login = async () => {
             router.push({ name: 'main-home' })
             isLoading.value = false
         }
-        isLoading = false
-    }).catch((error) => {
-        const { status, data } = error.response
-        if (status === 400) {
-            msgError.value = data
+        isLoading.value = false
+    }).catch((error) => {    
+
+        if(  error.hasOwnProperty('response')){
+            const { status, data } = error.response
+             if (status === 400) {
+                msgError.value = data
+                MensajeAlerta('warning', msgError.value, 'Error')
+                isLoading.value = false
+            }
+        }else{
+            const { message } = error
+            msgError.value = message
             MensajeAlerta('warning', msgError.value, 'Error')
             isLoading.value = false
         }
+      
     })
 
 
@@ -67,7 +73,7 @@ const logoUrl = computed(() => {
 </script>
 
 <template>
-    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden ">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
 
@@ -90,7 +96,6 @@ const logoUrl = computed(() => {
                         <Password id="password1" v-model="FormData.password" placeholder="Password" :toggleMask="true"
                             class="w-full md:w-30rem mb-5" inputClass="w-full" :inputStyle="{ padding: '1rem' }" required>
                         </Password>
-
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
                             <div class="flex align-items-center">
                                 <Checkbox v-model="FormData.checked" id="rememberme1" binary class="mr-2"></Checkbox>
@@ -100,12 +105,12 @@ const logoUrl = computed(() => {
                                 style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
                         <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"
-                            :disabled="isLoading"></Button>
+                            :disabled="isLoading"></Button>                   
                             <br>
                             <br>
                             <br>
-                        <a :onClick="ClicRegister" class="font-medium no-underline ml-2 text-right cursor-pointer" 
-                            style="color: var(--primary-color)">No tienes cuenta ? Registrarse</a>
+                            <router-link to="/Register" class="font-medium no-underline ml-2 text-right cursor-pointer" 
+                                style="color: var(--primary-color)">No tienes cuenta ? Registrate</router-link>                       
                     </form>
                 </div>
             </div>
