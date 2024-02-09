@@ -14,9 +14,9 @@
              to: "/MaestroCuentas",
            },
            {
-             label: "Maestro Sucursales",
+             label: "Maestro Clientes",
              icon: "pi pi-fw pi-shopping-bag",
-             to: "/MaestroSucursales",
+             to: "/MaestroClientes",
            },
            {
              label: "Asignacion Sucursal",

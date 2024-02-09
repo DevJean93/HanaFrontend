@@ -10,9 +10,9 @@ const rutas = [
   },
   
   {
-    path: "/MaestroSucursales",
-    name: "maestro-sucursales",
-    component: () => import("@/modules/SuchefVentas//pages/MaestroSucursales.vue"),
+    path: "/MaestroClientes",
+    name: "maestro-clientes",
+    component: () => import("@/modules/SuchefVentas//pages/MaestroClientes.vue"),
     meta: {
       roles: ["Admin"],
     },
