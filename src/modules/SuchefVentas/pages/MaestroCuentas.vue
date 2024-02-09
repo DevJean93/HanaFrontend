@@ -2,7 +2,7 @@
 <script setup>
 
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useCuenta } from '../store/CuentasStore'
 import { MensajeAlerta } from '../../../composables/MensajeAlerta';
 import Card from 'primevue/card';
