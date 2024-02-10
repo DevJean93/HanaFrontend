@@ -4,7 +4,7 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onBeforeMount } from 'vue';
 import { useCliente } from '../store/ClientesStore'
-import { MensajeAlerta } from '../../../composables/MensajeAlerta';
+import { MensajeAlertaAuth } from '../../../composables/MensajeAlerta';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -12,8 +12,11 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge'
 import Toolbar from 'primevue/toolbar'
+import { storeToRefs } from 'pinia'
+
 
 const client = useCliente();
+const {ListadoClientes} =  storeToRefs(client)
 const isLoading = ref(false)
 const filters = ref({});
 const DtoClientes = [{
@@ -38,13 +41,13 @@ const getClientes = async () => {
     isLoading.value = true
     try {
         await client.ObtenerClientesAlimunsa()
-        ListarClient.value = client.ListadoClientes
+        ListarClient.value = ListadoClientes.value
         isLoading.value = false
 
     }
-    catch {
+    catch (error) {
         isLoading.value = false
-        MensajeAlerta('warning', 'No se encontraron clientes para esta Empresa!', 'Cuentas SAP')
+     MensajeAlertaAuth('warning', 'No se encontraron clientes para esta Empresa!', 'Cuentas SAP')         
     }
 
 }

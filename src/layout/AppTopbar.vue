@@ -76,7 +76,7 @@ const isOutsideClicked = (event) => {
     <div class="layout-topbar">
         <router-link to="/Home" class="layout-topbar-logo">
             <img :src="logoUrl" alt="logo" />
-            <span>Bienvenido {{ isAuthenticated ? isAuthenticated.UserName : 'Default' }}</span>
+            <span>{{ isAuthenticated ? isAuthenticated.UserName.toUpperCase() : 'Default' }}</span>
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">

@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
-
+import { useAuth } from "../stores/AuthStore";
+const Auth = useAuth();
 export const ToastAlert = (icon, data) => {
-
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -19,7 +19,7 @@ export const ToastAlert = (icon, data) => {
   });
 };
 
-export const MensajeAlerta = (icon, mensaje,titulo) => {
+export const MensajeAlerta = (icon, mensaje, titulo) => {
   const Alerta = Swal.fire({
     title: titulo,
     text: mensaje,
@@ -27,5 +27,12 @@ export const MensajeAlerta = (icon, mensaje,titulo) => {
   });
 };
 
-
-
+export const MensajeAlertaAuth = (icon, mensaje, titulo) => {
+  if (Auth.isAuth) {
+    const Alerta = Swal.fire({
+      title: titulo,
+      text: mensaje,
+      icon: icon,
+    });
+  }
+};

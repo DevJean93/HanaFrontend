@@ -4,7 +4,7 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onBeforeMount } from 'vue';
 import { useCuenta } from '../store/CuentasStore'
-import { MensajeAlerta } from '../../../composables/MensajeAlerta';
+import { MensajeAlertaAuth } from '../../../composables/MensajeAlerta';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -36,7 +36,9 @@ const getCuentas = async () => {
    }
    catch {
       isLoading.value = false
-      MensajeAlerta('warning', 'No se encontraron cuentas para esta Empresa!', 'Cuentas SAP')
+
+      MensajeAlertaAuth('warning', 'No se encontraron cuentas para esta Empresa!', 'Cuentas SAP')
+
    }
 
 }

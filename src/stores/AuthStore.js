@@ -64,6 +64,25 @@ export const useAuth = defineStore("auth", () => {
     }
   }
 
+    async function checkTokenByStorage(token) {
+      try {
+        const tokenAuth = `Bearer ${token}`;
+
+        const response = await HanaAPI.get("/Auth/ValidarToken", {
+          params: {
+            Token: token,
+          },
+          headers: {
+            Authorization: tokenAuth,
+          },
+        });
+        return response;
+      } catch (error) {
+        clear();
+        router.push({ name: "main" });
+      }
+    }
+
   function clear() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -78,6 +97,7 @@ export const useAuth = defineStore("auth", () => {
     setToken,
     setUser,
     checkToken,
+    checkTokenByStorage,
     isAuthenticated,
     userEmail,
     clear,
