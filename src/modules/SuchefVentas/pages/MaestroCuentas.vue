@@ -67,7 +67,7 @@ const initFilters = () => {
             <template v-slot:start>
                <div class="my-2 menu">
                   <div class="caja-botones">
-                     <Button label="Buscar" icon="pi pi-search" class="p-button-success mr-2" :loading="isLoading"
+                     <Button label="Buscar" icon="pi pi-search" class="p-button-primary mr-2" :loading="isLoading"
                         @click="getCuentas" />
                   </div>
                   <div class="caja-input">

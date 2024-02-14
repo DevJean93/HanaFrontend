@@ -67,8 +67,10 @@ const isOutsideClicked = (event) => {
 
     const sidebarEl = document.querySelector('.layout-topbar-menu');
     const topbarEl = document.querySelector('.layout-topbar-menu-button');
-
-    return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
+    if(sidebarEl !== null & topbarEl !==null){
+        return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
+    }
+   
 };
 </script>
 
