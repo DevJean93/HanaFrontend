@@ -78,18 +78,12 @@ const initFilters = () => {
                   </div>
                </div>
             </template>
-
-            <!-- <template v-slot:end>
-               <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import"
-                  class="mr-2 inline-block" />
-               <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)" />
-            </template> -->
          </Toolbar>
 
          <DataTable :value="ListarCuentas" paginator :rows="10" :filters="filters" :rowsPerPageOptions="[10, 15, 20, 50]"
             stripedRows tableStyle="min-width: 50rem"
             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-            currentPageReportTemplate="{first} a {last} de {totalRecords}">
+            currentPageReportTemplate="{first} a {last} de {totalRecords}" class="p-datatable-gridlines">
             <template #header>
                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <h5 class="m-0">Maestro de Cuentas</h5>

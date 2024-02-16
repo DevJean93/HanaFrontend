@@ -24,6 +24,14 @@ const rutas = [
     meta: {
       roles: ["Admin"],
     },
+  },
+    {
+    path: "/GenerarVenta",
+    name: "ventas-sucursal",
+    component: () => import("@/modules/SuchefVentas/pages/GenerarVentaSAP.vue"),
+    meta: {
+      roles: ["Admin"],
+    },
   }
 ];
       

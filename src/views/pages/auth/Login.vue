@@ -105,7 +105,7 @@ const logoUrl = computed(() => {
                                 style="color: var(--primary-color)">Olvidaste tu password?</a>
                         </div>
                         <Button type="submit" label="Iniciar Sesion" class="w-full p-3 text-xl"
-                            :disabled="isLoading"></Button>                   
+                            :loading="isLoading"></Button>                   
                             <br>
                             <br>
                             <br>

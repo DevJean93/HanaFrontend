@@ -13,12 +13,14 @@ export const useTienda = defineStore("Tiendas", () => {
       estado: true,
       codigoSAP: null,
       descripcionSAP: null,
+      CtaSysSAP:null
     },
   ]);
 
   const EditarTiendaById = async (data) => {
     // Buscar el índice del objeto con el id
     const indice = Tiendas.value.findIndex((tienda) => tienda.id === data.id);
+
     // Verificar si se encontró un objeto con el id
     if (indice !== -1) {
       // Actualizar el objeto con los nuevos datos

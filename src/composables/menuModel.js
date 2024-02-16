@@ -5,7 +5,7 @@
      label: "Suchef",
      items: [
        {
-         label: "Modulo Ventas",
+         label: "Modulo Ventas SAP",
          icon: "pi pi-fw pi-calculator",
          items: [
            {
@@ -22,6 +22,11 @@
              label: "Asignacion Sucursal",
              icon: "pi pi-fw pi-list",
              to: "/Asignaciones",
+           },
+           {
+             label: "Excel Ventas",
+             icon: "pi pi-file-excel",
+             to: "/GenerarVenta",
            },
          ],
        },

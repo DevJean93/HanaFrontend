@@ -87,7 +87,7 @@ const initFilters = () => {
             <DataTable :value="ListarClient" paginator :rows="10" :filters="filters" :rowsPerPageOptions="[10, 15, 20, 50]"
                 stripedRows tableStyle="min-width: 50rem"
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="{first} a {last} de {totalRecords}">
+                currentPageReportTemplate="{first} a {last} de {totalRecords}" class="p-datatable-gridlines">
                 <template #header>
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Maestro de Clientes</h5>
