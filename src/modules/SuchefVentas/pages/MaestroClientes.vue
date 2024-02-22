@@ -2,25 +2,24 @@
 <script setup>
 
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { useCliente } from '../store/ClientesStore'
 import { MensajeAlertaAuth } from '../../../composables/MensajeAlerta';
 import Card from 'primevue/card';
-import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge'
-import Toolbar from 'primevue/toolbar'
 import { storeToRefs } from 'pinia'
+import Skeleton from 'primevue/skeleton'
 
 
 const client = useCliente();
-const {ListadoClientes} =  storeToRefs(client)
+const { ListadoClientes } = storeToRefs(client)
 const isLoading = ref(false)
 const filters = ref({});
 const DtoClientes = [{
-   codigo: '',
+    codigo: '',
     nombre: '',
     nombreext: '',
     grupo: null,
@@ -37,7 +36,7 @@ const DtoClientes = [{
 }]
 const ListarClient = ref(DtoClientes)
 
-const getClientes = async () => {
+onMounted(async () => {
     isLoading.value = true
     try {
         await client.ObtenerClientesAlimunsa()
@@ -47,11 +46,9 @@ const getClientes = async () => {
     }
     catch (error) {
         isLoading.value = false
-     MensajeAlertaAuth('warning', 'No se encontraron clientes para esta Empresa!', 'Cuentas SAP')         
+        MensajeAlertaAuth('warning', 'No se encontraron clientes para esta Empresa!', 'Cuentas SAP')
     }
-
-}
-
+})
 
 onBeforeMount(() => {
     initFilters();
@@ -67,22 +64,6 @@ const initFilters = () => {
 <template>
     <Card>
         <template #content>
-            <Toolbar class="mb-4">
-                <template v-slot:start>
-                    <div class="my-2 menu">
-                        <div class="caja-botones">
-                            <Button label="Buscar" icon="pi pi-search" class="p-button-primary mr-2" :loading="isLoading"
-                                @click="getClientes" />
-                        </div>
-                    </div>
-                </template>
-
-                <!-- <template v-slot:end>
-               <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import"
-                  class="mr-2 inline-block" />
-               <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)" />
-            </template> -->
-            </Toolbar>
 
             <DataTable :value="ListarClient" paginator :rows="10" :filters="filters" :rowsPerPageOptions="[10, 15, 20, 50]"
                 stripedRows tableStyle="min-width: 50rem"
@@ -99,22 +80,45 @@ const initFilters = () => {
                 </template>
                 <Column header="Codigo" sortable style="width: 5%">
                     <template #body="{ data }">
+                      <template v-if="isLoading"><Skeleton></Skeleton></template>                   
                         <template v-if="data.codigo">
                             <Badge style="width: 100%;" class="mr-2">{{ data.codigo }}</Badge>
                         </template>
                     </template>
                 </Column>
-                <Column field="nombre" header="Nombre" sortable style="width: 10%"></Column>
-                <Column field="grupo" header="NoGrupo" sortable style="width: 2%"></Column>
-                <Column field="nombrE_GRUPO" header="Desc Grupo" sortable style="width: 5%"></Column>
-                <Column field="tipo" header="Tipo Grupo" sortable style="width: 2%"></Column>
-                <Column field="nit" header="Nit" sortable style="width: 5%"></Column>
-                <Column field="moneda" header="Moneda" sortable style="width: 6%"></Column>
-                <Column field="limitecredito" header="Limite Credito" sortable style="width: 6%"></Column>
-                <Column field="fechaactualiza" header="Fecha Actualiza" sortable style="width: 6%"></Column>
-                <Column field="deuda" header="Deuda" sortable style="width: 6%"></Column>
-                <Column field="saldo" header="Saldo" sortable style="width: 6%"></Column>
-                <Column field="estado" header="Estado" sortable style="width: 2%"></Column>
+                <Column field="nombre" header="Nombre" sortable headerStyle="min-width:5rem;">
+                    <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="grupo" header="NoGrupo" sortable headerStyle="min-width:5rem;">
+                    <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="nombrE_GRUPO" header="Desc Grupo" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="tipo" header="Tipo Grupo" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="nit" header="Nit" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="moneda" header="Moneda" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="limitecredito" header="Limite Credito" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="fechaactualiza" header="Fecha Actualiza" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="deuda" header="Deuda" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="saldo" header="Saldo" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="estado" header="Estado" sortable headerStyle="min-width:5rem;">
+                <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
                 <!-- <Column header="Acciones" style="width: 10%;">
                <template #body="slotProps">
                   <template v-if="slotProps.data.cuenta">

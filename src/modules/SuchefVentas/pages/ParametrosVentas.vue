@@ -14,6 +14,7 @@ import InputText from 'primevue/inputtext'
 import Column from 'primevue/column';
 import Badge from 'primevue/badge';
 import Dialog from 'primevue/dialog'
+import Skeleton from 'primevue/skeleton';
 // REFERENCIAS GENERALES
 import { MensajeAlertaAuth, ToastAlert, ConfirmAlert } from '../../../composables/MensajeAlerta';
 // PINIA 
@@ -43,6 +44,7 @@ const CreateParametro = ref([
 
 const isLoadingEdit = ref(false)
 const isLoadingDelete = ref(false)
+const isLoading = ref(false)
 const saveParametroLoad = ref(false)
 const submitted = ref(false);
 const submittedCreate = ref(false);
@@ -58,7 +60,6 @@ const ListarParametros = ref(DTOParametro)
 
 
 const CrearParametro = async () => {
-    console.log(CreateParametro)
     submittedCreate.value = true
     if (CreateParametro.value.propiedad && CreateParametro.value.descripcion && CreateParametro.value.valor) {
 
@@ -77,8 +78,10 @@ const CrearParametro = async () => {
             ParametrosCreateDialog.value = false
             submittedCreate.value = false
             MensajeAlertaAuth('error', error.message, 'Error')
+
         })
     }
+    CreateParametro.value = {}
 
 }
 
@@ -114,24 +117,24 @@ const SaveParametro = async () => {
 }
 
 const EliminarParametro = async (data) => {
-    ConfirmAlert('Eliminar Parametro', 
-    `Esta seguro de eliminar el Parametro ${data.propiedad}`, 
-    'warning', 'Si Eliminar', 
-  async  (result) => {
-        if (result.isConfirmed) {
-           await APISAP.delete("/Ventas/EliminarParametrosVenta",{
-            params:{
-                Id: data.id
+    ConfirmAlert('Eliminar Parametro',
+        `Esta seguro de eliminar el Parametro ${data.propiedad}`,
+        'warning', 'Si Eliminar',
+        async (result) => {
+            if (result.isConfirmed) {
+                await APISAP.delete("/Ventas/EliminarParametrosVenta", {
+                    params: {
+                        Id: data.id
+                    }
+                }).then((response) => {
+                    params.EliminarParametro(response.data)
+                    console.log(response.data)
+                    ToastAlert('success', 'Parametro eliminado con Exito')
+                }).catch((error) => {
+                    MensajeAlertaAuth('error', error.message, 'Error')
+                })
             }
-           }).then((response)=>{
-             params.EliminarParametro(response.data)
-             console.log(response.data)
-              ToastAlert('success', 'Parametro eliminado con Exito')
-           }).catch((error)=>{
-              MensajeAlertaAuth('error', error.message, 'Error')
-           })
-        }
-    })
+        })
 }
 const hideDialog = () => {
     ParametrosEditDialog.value = false;
@@ -155,14 +158,15 @@ const initFilters = () => {
 
 
 onMounted(async () => {
-
+ isLoading.value = true
     try {
         await params.ObtenerParametros()
         ListarParametros.value = ListadoParametros.value
+         isLoading.value = false
     }
     catch {
         MensajeAlertaAuth('warning', 'No se encontraron parametros para esta Empresa!', 'Cuentas SAP')
-
+        isLoading.value = false
     }
 });
 
@@ -196,18 +200,26 @@ onMounted(async () => {
                         </span>
                     </div>
                 </template>
-                <Column field="id" header="Id Parametro" sortable headerStyle="min-width:5rem;"></Column>
-                <Column field="propiedad" header="Propiedad" sortable headerStyle="min-width:10rem;"></Column>
+                <Column field="id" header="Id Parametro" sortable headerStyle="min-width:5rem;">
+                 <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="propiedad" header="Propiedad" sortable headerStyle="min-width:10rem;">
+                 <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
                 <Column header="Valor" :sortable="true" headerStyle="min-width:10rem;">
                     <template #body="{ data }">
+                         <template v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="data.valor">
                             <Badge style="width: 100%;" class="mr-2" severity="primary">{{ data.valor }}</Badge>
                         </template>
                     </template>
                 </Column>
-                <Column field="descripcion" header="Descripcion" sortable headerStyle="min-width:10rem;"></Column>
+                <Column field="descripcion" header="Descripcion" sortable headerStyle="min-width:10rem;">
+                 <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
                 <Column header="Acciones" headerStyle="min-width:10rem;">
                     <template #body="slotProps">
+                         <template  v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="slotProps.data.id">
                             <Button icon="pi pi-file-edit" :loading="isLoadingEdit"
                                 class="p-button-rounded p-button-warning mt-2 mr-2"

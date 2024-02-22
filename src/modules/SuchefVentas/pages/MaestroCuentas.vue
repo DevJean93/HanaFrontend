@@ -2,17 +2,15 @@
 <script setup>
 
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount , onMounted } from 'vue';
 import { useCuenta } from '../store/CuentasStore'
 import { MensajeAlertaAuth } from '../../../composables/MensajeAlerta';
 import Card from 'primevue/card';
-import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge'
-import Toolbar from 'primevue/toolbar'
-
+import Skeleton from 'primevue/skeleton';
 const cuent = useCuenta();
 const isLoading = ref(false)
 const inputEmpresa = ref('')
@@ -26,22 +24,7 @@ const DtoCuentas = [{
 }]
 const ListarCuentas = ref(DtoCuentas)
 
-const getCuentas = async () => {
-   isLoading.value = true
-   try {
-      await cuent.ObtenerCuentas(inputEmpresa.value.toUpperCase())
-      ListarCuentas.value = cuent.ListadoCuentas
-      isLoading.value = false
 
-   }
-   catch {
-      isLoading.value = false
-
-      MensajeAlertaAuth('warning', 'No se encontraron cuentas para esta Empresa!', 'Cuentas SAP')
-
-   }
-
-}
 
 const EliminarCuenta = (data) => {
 
@@ -53,6 +36,22 @@ onBeforeMount(() => {
    initFilters();
 });
 
+onMounted(async ()=>{
+   isLoading.value = true
+   try {
+      await cuent.ObtenerCuentas('ALIMUNSA')
+      ListarCuentas.value = cuent.ListadoCuentas
+      isLoading.value = false
+
+   }
+   catch {
+      isLoading.value = false
+
+      MensajeAlertaAuth('warning', 'No se encontraron cuentas para esta Empresa!', 'Cuentas SAP')
+
+   }
+})
+
 const initFilters = () => {
    filters.value = {
       global: { value: null, matchMode: FilterMatchMode.CONTAINS }
@@ -63,22 +62,6 @@ const initFilters = () => {
 <template>
    <Card>
       <template #content>
-         <Toolbar class="mb-4">
-            <template v-slot:start>
-               <div class="my-2 menu">
-                  <div class="caja-botones">
-                     <Button label="Buscar" icon="pi pi-search" class="p-button-primary mr-2" :loading="isLoading"
-                        @click="getCuentas" />
-                  </div>
-                  <div class="caja-input">
-                     <span class="p-float-label">
-                        <InputText type="text" id="Empresa" v-model="inputEmpresa" />
-                        <label for="Empresa">Empresa</label>
-                     </span>
-                  </div>
-               </div>
-            </template>
-         </Toolbar>
 
          <DataTable :value="ListarCuentas" paginator :rows="10" :filters="filters" :rowsPerPageOptions="[10, 15, 20, 50]"
             stripedRows tableStyle="min-width: 50rem"
@@ -95,15 +78,24 @@ const initFilters = () => {
             </template>
             <Column header="Cuenta" sortable style="width: 15%">
                <template #body="{ data }">
+                   <template  v-if="isLoading"><Skeleton></Skeleton></template>
                   <template v-if="data.cuenta">
                      <Badge class="mr-2">{{ data.cuenta }}</Badge>
                   </template>
                </template>
             </Column>
-            <Column field="nombreCuenta" header="Descripcion" sortable style="width: 30%"></Column>
-            <Column field="cuenta_SAP" header="Cta SAP" sortable style="width: 30%"></Column>
-            <Column field="nivel" header="Nivel" sortable style="width: 10%"></Column>
-            <Column field="cuenta_Moneda" header="Moneda" sortable style="width: 10%"></Column>
+            <Column field="nombreCuenta" header="Descripcion" sortable style="width: 30%">
+             <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+            </Column>
+            <Column field="cuenta_SAP" header="Cta SAP" sortable style="width: 30%">
+             <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+            </Column>
+            <Column field="nivel" header="Nivel" sortable style="width: 10%">
+             <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+            </Column>
+            <Column field="cuenta_Moneda" header="Moneda" sortable style="width: 10%">
+             <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+            </Column>
             <!-- <Column header="Acciones" style="width: 10%;">
                <template #body="slotProps">
                   <template v-if="slotProps.data.cuenta">

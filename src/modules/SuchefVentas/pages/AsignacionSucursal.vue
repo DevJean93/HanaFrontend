@@ -1,7 +1,7 @@
 
 <script setup>
 // VUE IMPORTS
-import { ref,onBeforeMount } from 'vue';
+import { ref,onBeforeMount , onMounted } from 'vue';
 
 // COMPOSABLES
 import { ToastAlert, MensajeAlertaAuth } from '../../../composables/MensajeAlerta';
@@ -14,11 +14,11 @@ import InputText from 'primevue/inputtext';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Badge from 'primevue/badge'
-import Toolbar from 'primevue/toolbar'
 import Dropdown from 'primevue/dropdown';
 import Dialog from 'primevue/dialog'
 import { storeToRefs } from 'pinia'
 import SelectButton from 'primevue/selectbutton';
+import Skeleton from 'primevue/skeleton';
 // PINIA IMPORTS
 import { useCuenta } from '../store/CuentasStore';
 import { useCliente } from '../store/ClientesStore'
@@ -71,20 +71,6 @@ const DtoTiendas = [{
 
 
 const ListarTiendas = ref(DtoTiendas)
-
-const getTiendas = async () => {
-    isLoading.value = true
-    try {
-        await tienda.ObtenerTiendas()
-        ListarTiendas.value = ListadoTiendas.value
-        isLoading.value = false
-    }
-    catch (error) {
-        isLoading.value = false
-        MensajeAlertaAuth('warning', 'No se encontraron tiendas!', 'Tiendas SAP')
-    }
-
-}
 
 const EditarTienda = async (editTienda) => {
 
@@ -185,6 +171,19 @@ onBeforeMount(() => {
     initFilters();
 });
 
+onMounted(async()=>{
+    isLoading.value = true
+    try {
+        await tienda.ObtenerTiendas()
+        ListarTiendas.value = ListadoTiendas.value
+        isLoading.value = false
+    }
+    catch (error) {
+        isLoading.value = false
+        MensajeAlertaAuth('warning', 'No se encontraron tiendas!', 'Tiendas SAP')
+    }
+
+})
 const initFilters = () => {
     filters.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
@@ -195,17 +194,6 @@ const initFilters = () => {
 <template>
     <Card>
         <template #content>
-            <Toolbar class="mb-4">
-                <template v-slot:start>
-                    <div class="my-2 menu">
-                        <div class="caja-botones">
-                            <Button label="Buscar" icon="pi pi-search" class="p-button-primary mr-2" :loading="isLoading"
-                                @click="getTiendas" />
-                            <!-- <Button label="Crear" icon="pi pi-plus" class="p-button-success mr-2" @click="openNew" /> -->
-                        </div>
-                    </div>
-                </template>
-            </Toolbar>
 
             <DataTable :value="ListarTiendas" paginator :rows="10" :filters="filters" :rowsPerPageOptions="[10, 15, 20, 50]"
                 stripedRows tableStyle="min-width: 50rem"
@@ -222,15 +210,21 @@ const initFilters = () => {
                 </template>
                 <Column header="Codigo Sucursal" :sortable="true" style="width: 5%">
                     <template #body="{ data }">
+                         <template v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="data.tiendaPOS">
                             <Badge style="width: 100%;" class="mr-2">{{ data.tiendaPOS }}</Badge>
                         </template>
                     </template>
                 </Column>
-                <Column field="descripcion" header="Descripcion" :sortable="true" headerStyle="min-width:10rem;"></Column>
-                <Column field="agrupacion" header="Agrupacion" :sortable="true" headerStyle="min-width:10rem;"></Column>
+                <Column field="descripcion" header="Descripcion" :sortable="true" headerStyle="min-width:10rem;">
+                 <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
+                <Column field="agrupacion" header="Agrupacion" :sortable="true" headerStyle="min-width:10rem;">
+                 <template #body v-if="isLoading"><Skeleton></Skeleton></template>
+                </Column>
                 <Column header="Estado" :sortable="true" headerStyle="min-width:10rem;">
                     <template #body="{ data }">
+                         <template  v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="data.estado !== null">
                             <template v-if="data.estado === true">
                                 <Badge style="width: 100%;" class="mr-2" severity="success">ACTIVO</Badge>
@@ -245,26 +239,32 @@ const initFilters = () => {
                 </Column>
                 <Column header="Cliente SAP" :sortable="true" style="width: 10%">
                     <template #body="{ data }">
+                         <template  v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="data.codigoSAP">
                             <Badge style="width: 100%;" class="mr-2" severity="warning">{{ data.codigoSAP }}</Badge>
                         </template>
                     </template>
                 </Column>
                 <Column field="descripcionSAP" header="Desc ClienteSAP" :sortable="true" headerStyle="min-width:10rem;">
+                     <template #body v-if="isLoading"><Skeleton></Skeleton></template>
                 </Column>
                 <Column header="Cuenta Venta" :sortable="true" style="width: 5%">
                     <template #body="{ data }">
+                         <template v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="data.cuentaSAP">
                             <Badge style="width: 100%;" class="mr-2" severity="warning">{{ data.cuentaSAP }}</Badge>
                         </template>
                     </template>
                 </Column>
                 <Column field="ctaDescripcion" header="Desc Cuenta" :sortable="true" headerStyle="min-width:10rem;">
+                     <template #body v-if="isLoading"><Skeleton></Skeleton></template>
                 </Column>
                       <Column field="ctaSysSAP" header="Sys Cuenta" :sortable="true" headerStyle="min-width:10rem;">
+                         <template #body v-if="isLoading"><Skeleton></Skeleton></template>
                     </Column>
                 <Column header="Acciones" headerStyle="min-width:10rem;">
                     <template #body="slotProps">
+                         <template  v-if="isLoading"><Skeleton></Skeleton></template>
                         <template v-if="slotProps.data.id">
                             <Button icon="pi pi-file-edit" :loading="isLoadingEdit"
                                 class="p-button-rounded p-button-warning mt-2" @click="EditarTienda(slotProps.data)" />
