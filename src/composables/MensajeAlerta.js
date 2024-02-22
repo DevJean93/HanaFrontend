@@ -36,3 +36,18 @@ export const MensajeAlertaAuth = (icon, mensaje, titulo) => {
     });
   }
 };
+
+ 
+export const ConfirmAlert = (titulo, texto, icono, textoconfirm, funcresult) => {
+  Swal.fire({
+    title: titulo,
+    text: texto,
+    icon: icono,
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: textoconfirm,
+  }).then((result) => {
+    funcresult(result);
+  });
+}

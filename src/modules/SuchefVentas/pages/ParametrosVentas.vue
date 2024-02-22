@@ -15,7 +15,7 @@ import Column from 'primevue/column';
 import Badge from 'primevue/badge';
 import Dialog from 'primevue/dialog'
 // REFERENCIAS GENERALES
-import { MensajeAlertaAuth, ToastAlert } from '../../../composables/MensajeAlerta';
+import { MensajeAlertaAuth, ToastAlert, ConfirmAlert } from '../../../composables/MensajeAlerta';
 // PINIA 
 import { useParametro } from '../store/ParametrosStore'
 import { storeToRefs } from 'pinia';
@@ -79,7 +79,6 @@ const CrearParametro = async () => {
             MensajeAlertaAuth('error', error.message, 'Error')
         })
     }
-        submittedCreate.value = false
 
 }
 
@@ -97,7 +96,7 @@ const EditarParametro = async (data) => {
 
 const SaveParametro = async () => {
     submitted.value = true
-    if (CreateParametro.value.propiedad && CreateParametro.value.descripcion && CreateParametro.value.valor) {
+    if (parametro.value.propiedad && parametro.value.descripcion && parametro.value.valor) {
 
         await APISAP.put("/Ventas/EditarParametrosVenta", parametro.value).then((response) => {
             params.EditarParametroById(response.data)
@@ -112,11 +111,27 @@ const SaveParametro = async () => {
             MensajeAlertaAuth('error', error.message, 'Error')
         })
     }
-       submitted.value = false
 }
 
 const EliminarParametro = async (data) => {
-    console.log('eliminar', data)
+    ConfirmAlert('Eliminar Parametro', 
+    `Esta seguro de eliminar el Parametro ${data.propiedad}`, 
+    'warning', 'Si Eliminar', 
+  async  (result) => {
+        if (result.isConfirmed) {
+           await APISAP.delete("/Ventas/EliminarParametrosVenta",{
+            params:{
+                Id: data.id
+            }
+           }).then((response)=>{
+             params.EliminarParametro(response.data)
+             console.log(response.data)
+              ToastAlert('success', 'Parametro eliminado con Exito')
+           }).catch((error)=>{
+              MensajeAlertaAuth('error', error.message, 'Error')
+           })
+        }
+    })
 }
 const hideDialog = () => {
     ParametrosEditDialog.value = false;
@@ -211,7 +226,7 @@ onMounted(async () => {
                     <label for="id">Id Parametro</label>
                     <InputText id="id" v-model.trim="parametro.id" required="true" autofocus :disabled="true"
                         :class="{ 'p-invalid': submitted && !parametro.id }" />
-                    <small class="p-invalid" v-if="submitted && !parametro.id">El Parametro es requeri</small>
+                    <small class="p-invalid" v-if="submitted && !parametro.id">El Parametro es requerido</small>
                 </div>
                 <div class="field">
                     <label for="">Propiedad</label>

@@ -35,6 +35,15 @@ export const useParametro = defineStore("Parametros", () => {
   const InsertarParametro = (nuevoParametro)=>{
     Parametro.value.push(nuevoParametro);
   }
+  
+  const EliminarParametro = (idParametro) => {
+    const index = Parametro.value.findIndex(
+      (parametro) => parametro.id === idParametro.id
+    );
+    if (index !== -1) {
+      Parametro.value.splice(index, 1);
+    }
+  };
 
   const ListadoParametros = computed(() => {
     if (Parametro.value) {
@@ -47,6 +56,7 @@ export const useParametro = defineStore("Parametros", () => {
     Parametro,
     InsertarParametro,
     EditarParametroById,
+    EliminarParametro,
     ObtenerParametros,
     ListadoParametros,
   };
