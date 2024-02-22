@@ -34,7 +34,7 @@ const DescargarVentas = async () => {
         params: {
             Tienda: SelectedTienda.value.value,
             FechaIni: GenerarFecha(icondisplay.value[0]),
-            FechaFin: GenerarFecha(icondisplay.value[1])``
+            FechaFin: GenerarFecha(icondisplay.value[1])
         },
         responseType: 'blob'
     })
@@ -62,7 +62,6 @@ onMounted(async () => {
     } catch (error) {
         MensajeAlertaAuth('error', error, 'Error de Carga')
     }
-
 
 });
 </script>
