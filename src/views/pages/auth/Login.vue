@@ -68,14 +68,14 @@ const Login = async () => {
 
 
 const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white-01' : 'logo-dark-01'}.svg`;
 });
 </script>
 
 <template>
     <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden ">
         <div class="flex flex-column align-items-center justify-content-center">
-            <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
+            <img :src="logoUrl" alt="Gala logo" class=" w-25rem flex-shrink-0" />
 
             <div
                 style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">

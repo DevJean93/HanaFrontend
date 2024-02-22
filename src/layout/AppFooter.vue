@@ -5,13 +5,13 @@ import { computed } from 'vue';
 const { layoutConfig } = useLayout();
 
 const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white-01' : 'logo-dark-01'}.svg`;
 });
 </script>
 
 <template>
     <div class="layout-footer">
-        <img :src="logoUrl" alt="Logo" height="20" class="mr-2" />
+
         Copyright © 2023-2024
         <span class="font-medium ml-2">GALA</span>
     </div>

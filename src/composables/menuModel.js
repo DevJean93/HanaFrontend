@@ -24,6 +24,11 @@
              to: "/Asignaciones",
            },
            {
+             label: "Parametros Ventas",
+             icon: "pi pi-sliders-v",
+             to: "/ParametrosVentas",
+           },
+           {
              label: "Excel Ventas",
              icon: "pi pi-file-excel",
              to: "/GenerarVenta",
