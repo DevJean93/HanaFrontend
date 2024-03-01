@@ -3,6 +3,10 @@ import AuthGuard from "@/router/AuthGuard";
 import rutasSuchef from '@/modules/SuchefVentas/router/rutasSuchef'
 const routes = [
   {
+    path: '/:catchAll(.*)',
+    redirect: '/Error' // Puedes cambiar '/Error' por la ruta que desees como por defecto
+  },
+  {
     path: "/",
     name: "main",
     component: () => import("../views/pages/auth/Login.vue"),

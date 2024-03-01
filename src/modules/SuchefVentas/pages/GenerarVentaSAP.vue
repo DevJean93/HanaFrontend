@@ -117,7 +117,6 @@ onMounted(async () => {
                 </template>
             </Card>
         </template>
-
     </Card>
 </template>
 

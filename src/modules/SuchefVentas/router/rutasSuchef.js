@@ -5,7 +5,7 @@ const rutas = [
     name: "maestro-cuentas",
     component: () => import("@/modules/SuchefVentas/pages/MaestroCuentas.vue"),
     meta: {
-      roles: ["Admin"],
+      roles: ["Admin", "User", "Gerencia"],
     },
   },
 
@@ -15,7 +15,7 @@ const rutas = [
     component: () =>
       import("@/modules/SuchefVentas//pages/MaestroClientes.vue"),
     meta: {
-      roles: ["Admin"],
+      roles: ["Admin", "User", "Gerencia"],
     },
   },
   {
@@ -24,7 +24,7 @@ const rutas = [
     component: () =>
       import("@/modules/SuchefVentas/pages/AsignacionSucursal.vue"),
     meta: {
-      roles: ["Admin"],
+      roles: ["Admin", "User", "Gerencia"],
     },
   },
   {
@@ -33,7 +33,7 @@ const rutas = [
     component: () =>
       import("@/modules/SuchefVentas/pages/ParametrosVentas.vue"),
     meta: {
-      roles: ["Admin"],
+      roles: ["Admin", "User", "Gerencia"],
     },
   },
   {
@@ -41,7 +41,7 @@ const rutas = [
     name: "ventas-sucursal",
     component: () => import("@/modules/SuchefVentas/pages/GenerarVentaSAP.vue"),
     meta: {
-      roles: ["Admin"],
+      roles: ["Admin", "User", "Gerencia"],
     },
   },
 ];
