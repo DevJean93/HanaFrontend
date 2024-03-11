@@ -1,6 +1,10 @@
 pipeline {
     agent any
     tools {nodejs "node"}
+    agent { dockerfile true }
+    environment {
+        HOME = "${env.WORKSPACE}"
+    }
     stages {
         stage('Checkout') {
             steps {
