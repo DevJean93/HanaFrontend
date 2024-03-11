@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'node' }
-    }
+    agent any
     tools {nodejs "node"}
     stages {
         stage('Checkout') {
