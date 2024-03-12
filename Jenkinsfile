@@ -24,6 +24,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the application on Docker'
+                sh 'docker ps -q'
                 sh 'docker run -p 8083:80 -d todo-app'
             }
         }
