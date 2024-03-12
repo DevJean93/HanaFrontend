@@ -13,7 +13,6 @@ pipeline {
   
           stage('Docker Build') {
             steps {
-                  sh 'docker ps -q'
                 script {
                    docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
 
