@@ -1,21 +1,18 @@
 pipeline {
     agent any
     tools {nodejs "node"}
-      environment {
-    HOME = "${env.WORKSPACE}"
-  }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-         stage('Initialize'){
+        stage('Initialize'){
            steps{
             def dockerHome = tool 'docker'
                 env.PATH = "${dockerHome}/bin:${env.PATH}"
             }
          }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 sh 'npm install' // Instala las dependencias de Node.js
