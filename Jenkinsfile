@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'npm install' // Instala las dependencias de Node.js
                 echo 'Building the ToDo application on Docker'
-                sh 'docker build . -t todo-app'
+                sh 'docker build . -t todo-app .'
             }
         }
         stage('Deploy') {
