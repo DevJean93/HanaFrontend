@@ -10,6 +10,10 @@ pipeline {
                 checkout scm
             }
         }
+         stage('Initialize'){
+        def dockerHome = tool 'docker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+            }
         stage('Build') {
             steps {
                 sh 'npm install' // Instala las dependencias de Node.js
