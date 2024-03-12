@@ -7,11 +7,13 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build') {
+  
+          stage('Docker Build') {
             steps {
-                sh 'npm install' // Instala las dependencias de Node.js
-                echo 'Building the ToDo application on Docker'
-                sh 'docker build . -t todo-app .'
+                script {
+                    docker.build("testAPP"${BUILD_NUMBER}")
+                    // Construye la imagen de Docker con una etiqueta usando el número de compilación
+                }
             }
         }
         stage('Deploy') {
