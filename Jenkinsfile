@@ -1,6 +1,9 @@
 pipeline {
     agent any
     tools {nodejs "node"}
+      environment {
+    HOME = "${env.WORKSPACE}"
+  }
     stages {
         stage('Checkout') {
             steps {
