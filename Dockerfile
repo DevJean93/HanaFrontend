@@ -8,6 +8,7 @@ COPY package*.json /app/
 # Install dependencies
 RUN npm install
 # Copy app source code to /app
+RUN chmod +x ./run.sh
 COPY . /app/
 # Expose port 8000
 EXPOSE 8000
