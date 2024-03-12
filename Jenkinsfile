@@ -1,9 +1,6 @@
 
  agent any
     tools {nodejs "node"}
-  environment {
-        HOME = '.'
-    }
 pipeline {
     agent any
     stages {
