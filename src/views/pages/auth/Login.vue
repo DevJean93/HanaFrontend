@@ -101,7 +101,7 @@ const logoUrl = computed(() => {
             />
             <div class="text-900 text-3xl font-medium mb-3">Bienvenido a Docker!</div>
             <span class="text-600 font-medium"
-              >Inicia sesion para continuar</span
+              >Inicia sesion para continuar Docker</span
             >
           </div>
 
